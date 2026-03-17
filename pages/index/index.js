@@ -50,11 +50,17 @@ Page({
 
   bindTouch() {
     let startX, startY
+    let startTime
+    const minSwipeDistance = 20 // 最小滑动距离 (px)
 
     this.canvas.on('touchstart', (e) => {
       const touch = e.touches[0]
       startX = touch.clientX
       startY = touch.clientY
+      startTime = Date.now()
+      
+      // 触摸反馈：轻微震动
+      wx.vibrateShort({ type: 'light' })
     })
 
     this.canvas.on('touchmove', (e) => {
@@ -65,26 +71,49 @@ Page({
       const touch = e.changedTouches[0]
       const endX = touch.clientX
       const endY = touch.clientY
+      const endTime = Date.now()
+      const duration = endTime - startTime
 
       const diffX = endX - startX
       const diffY = endY - startY
+      const absDiffX = Math.abs(diffX)
+      const absDiffY = Math.abs(diffY)
 
-      if (Math.abs(diffX) > Math.abs(diffY)) {
+      // 判断是否为有效滑动（避免误触）
+      if (Math.max(absDiffX, absDiffY) < minSwipeDistance) {
+        return
+      }
+
+      // 快速滑动检测（避免过慢的滑动）
+      if (duration > 500) {
+        return
+      }
+
+      // 判断滑动方向：以水平/垂直中较大的为准
+      if (absDiffX > absDiffY) {
+        // 水平方向
         if (diffX > 0 && this.direction.x !== -1) {
           this.nextDirection = { x: 1, y: 0 }
+          console.log('向右滑动')
         } else if (diffX < 0 && this.direction.x !== 1) {
           this.nextDirection = { x: -1, y: 0 }
+          console.log('向左滑动')
         }
       } else {
+        // 垂直方向
         if (diffY > 0 && this.direction.y !== -1) {
           this.nextDirection = { x: 0, y: 1 }
+          console.log('向下滑动')
         } else if (diffY < 0 && this.direction.y !== 1) {
           this.nextDirection = { x: 0, y: -1 }
+          console.log '向上滑动')
         }
       }
 
-      startX = 0
-      startY = 0
+      // 重置起始点
+      startX = null
+      startY = null
+      startTime = null
     })
   },
 
@@ -243,6 +272,37 @@ Page({
 
   onStartTap() {
     this.startGame()
+  },
+
+  // 方向按钮控制（备用方案）
+  onDirectionTap(e) {
+    const direction = e.currentTarget.dataset.dir
+    
+    switch(direction) {
+      case 'up':
+        if (this.direction.y !== 1) {
+          this.nextDirection = { x: 0, y: -1 }
+        }
+        break
+      case 'down':
+        if (this.direction.y !== -1) {
+          this.nextDirection = { x: 0, y: 1 }
+        }
+        break
+      case 'left':
+        if (this.direction.x === 1) {
+          this.nextDirection = { x: -1, y: 0 }
+        }
+        break
+      case 'right':
+        if (this.direction.x === -1) {
+          this.nextDirection = { x: 1, y: 0 }
+        }
+        break
+    }
+    
+    // 按钮点击反馈
+    wx.vibrateShort({ type: 'light' })
   },
 
   onUnload() {

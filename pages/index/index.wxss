@@ -77,3 +77,45 @@
 .start-btn::after {
   border: none;
 }
+
+/* 方向控制按钮 */
+.direction-controls {
+  margin-top: 30rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.direction-row {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+  margin: 10rpx 0;
+}
+
+.direction-btn {
+  width: 100rpx;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(46, 204, 113, 0.2);
+  border-radius: 50%;
+  border: 4rpx solid rgba(46, 204, 113, 0.5);
+  box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+}
+
+.direction-btn:active {
+  background: rgba(46, 204, 113, 0.4);
+  transform: scale(0.9);
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+.direction-icon {
+  font-size: 48rpx;
+  color: #2ecc71;
+  font-weight: bold;
+  line-height: 1;
+}

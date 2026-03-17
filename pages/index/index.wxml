@@ -14,10 +14,48 @@
     type="2d" 
     id="gameCanvas" 
     class="game-canvas"
+    bindtouchstart="onCanvasTouchStart"
+    bindtouchend="onCanvasTouchEnd"
   ></canvas>
 
   <view class="game-info">
-    <text class="info-text">滑动屏幕控制方向</text>
+    <text class="info-text">👆 滑动屏幕 或 点击方向键控制</text>
+  </view>
+
+  <!-- 方向控制按钮（备用方案） -->
+  <view class="direction-controls" wx:if="{{isGameRunning}}">
+    <view class="direction-row">
+      <view 
+        class="direction-btn" 
+        data-dir="up"
+        bindtap="onDirectionTap"
+      >
+        <text class="direction-icon">▲</text>
+      </view>
+    </view>
+    <view class="direction-row">
+      <view 
+        class="direction-btn" 
+        data-dir="left"
+        bindtap="onDirectionTap"
+      >
+        <text class="direction-icon">◀</text>
+      </view>
+      <view 
+        class="direction-btn" 
+        data-dir="down"
+        bindtap="onDirectionTap"
+      >
+        <text class="direction-icon">▼</text>
+      </view>
+      <view 
+        class="direction-btn" 
+        data-dir="right"
+        bindtap="onDirectionTap"
+      >
+        <text class="direction-icon">▶</text>
+      </view>
+    </view>
   </view>
 
   <button 
