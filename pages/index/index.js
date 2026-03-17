@@ -106,7 +106,7 @@ Page({
           console.log('向下滑动')
         } else if (diffY < 0 && this.direction.y !== 1) {
           this.nextDirection = { x: 0, y: -1 }
-          console.log '向上滑动')
+          console.log('向上滑动')
         }
       }
 
