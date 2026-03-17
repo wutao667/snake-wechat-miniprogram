@@ -42,69 +42,64 @@ Page({
           this.ctx.scale(dpr, dpr)
           
           this.gridCount = Math.floor(width / this.gridSize)
+          
+          this.bindCanvasEvents()
         }
       })
   },
 
-  // 触摸起始
-  onCanvasTouchStart(e) {
-    const touch = e.touches[0]
-    this.startX = touch.clientX
-    this.startY = touch.clientY
-    this.startTime = Date.now()
-    
-    // 触摸反馈：轻微震动
-    wx.vibrateShort({ type: 'light' })
-  },
+  bindCanvasEvents() {
+    this.canvas.on('touchstart', (e) => {
+      if (!this.isGameRunning) return
+      
+      const touch = e.touches[0]
+      this.startX = touch.clientX
+      this.startY = touch.clientY
+      this.startTime = Date.now()
+      
+      wx.vibrateShort({ type: 'light' })
+    })
 
-  // 触摸结束
-  onCanvasTouchEnd(e) {
-    const touch = e.changedTouches[0]
-    const endX = touch.clientX
-    const endY = touch.clientY
-    const endTime = Date.now()
-    const duration = endTime - this.startTime
+    this.canvas.on('touchend', (e) => {
+      if (!this.isGameRunning) return
+      
+      const touch = e.changedTouches[0]
+      const endX = touch.clientX
+      const endY = touch.clientY
+      const endTime = Date.now()
+      const duration = endTime - this.startTime
 
-    const diffX = endX - this.startX
-    const diffY = endY - this.startY
-    const absDiffX = Math.abs(diffX)
-    const absDiffY = Math.abs(diffY)
+      const diffX = endX - this.startX
+      const diffY = endY - this.startY
+      const absDiffX = Math.abs(diffX)
+      const absDiffY = Math.abs(diffY)
 
-    // 判断是否为有效滑动（避免误触）
-    if (Math.max(absDiffX, absDiffY) < 20) {
-      return
-    }
-
-    // 快速滑动检测（避免过慢的滑动）
-    if (duration > 500) {
-      return
-    }
-
-    // 判断滑动方向：以水平/垂直中较大的为准
-    if (absDiffX > absDiffY) {
-      // 水平方向
-      if (diffX > 0 && this.direction.x !== -1) {
-        this.nextDirection = { x: 1, y: 0 }
-        console.log('向右滑动')
-      } else if (diffX < 0 && this.direction.x !== 1) {
-        this.nextDirection = { x: -1, y: 0 }
-        console.log('向左滑动')
+      if (Math.max(absDiffX, absDiffY) < 20) {
+        return
       }
-    } else {
-      // 垂直方向
-      if (diffY > 0 && this.direction.y !== -1) {
-        this.nextDirection = { x: 0, y: 1 }
-        console.log('向下滑动')
-      } else if (diffY < 0 && this.direction.y !== 1) {
-        this.nextDirection = { x: 0, y: -1 }
-        console.log('向上滑动')
-      }
-    }
 
-    // 重置起始点
-    this.startX = null
-    this.startY = null
-    this.startTime = null
+      if (duration > 500) {
+        return
+      }
+
+      if (absDiffX > absDiffY) {
+        if (diffX > 0 && this.direction.x !== -1) {
+          this.nextDirection = { x: 1, y: 0 }
+        } else if (diffX < 0 && this.direction.x !== 1) {
+          this.nextDirection = { x: -1, y: 0 }
+        }
+      } else {
+        if (diffY > 0 && this.direction.y !== -1) {
+          this.nextDirection = { x: 0, y: 1 }
+        } else if (diffY < 0 && this.direction.y !== 1) {
+          this.nextDirection = { x: 0, y: -1 }
+        }
+      }
+
+      this.startX = null
+      this.startY = null
+      this.startTime = null
+    })
   },
 
   startGame() {

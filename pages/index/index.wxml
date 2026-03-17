@@ -14,8 +14,6 @@
     type="2d" 
     id="gameCanvas" 
     class="game-canvas"
-    bindtouchstart="onCanvasTouchStart"
-    bindtouchend="onCanvasTouchEnd"
   ></canvas>
 
   <view class="game-info">
@@ -23,7 +21,7 @@
   </view>
 
   <!-- 方向控制按钮（备用方案） -->
-  <view class="direction-controls" wx:if="{{isGameRunning}}">
+  <view class="direction-controls" wx:if="{{isGameRunning || isGameOver}}">
     <view class="direction-row">
       <view 
         class="direction-btn" 
