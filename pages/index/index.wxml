@@ -1,0 +1,30 @@
+<view class="container">
+  <view class="score-board">
+    <view class="score-item">
+      <text class="score-label">当前分数</text>
+      <text class="score-value">{{score}}</text>
+    </view>
+    <view class="score-item">
+      <text class="score-label">最高分</text>
+      <text class="score-value">{{highestScore}}</text>
+    </view>
+  </view>
+
+  <canvas 
+    type="2d" 
+    id="gameCanvas" 
+    class="game-canvas"
+  ></canvas>
+
+  <view class="game-info">
+    <text class="info-text">滑动屏幕控制方向</text>
+  </view>
+
+  <button 
+    class="start-btn" 
+    bindtap="onStartTap"
+    disabled="{{isGameRunning}}"
+  >
+    {{isGameRunning ? '游戏中...' : (isGameOver ? '重新开始' : '开始游戏')}}
+  </button>
+</view>
