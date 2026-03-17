@@ -291,12 +291,12 @@ Page({
         }
         break
       case 'left':
-        if (this.direction.x === 1) {
+        if (this.direction.x !== 1) {
           this.nextDirection = { x: -1, y: 0 }
         }
         break
       case 'right':
-        if (this.direction.x === -1) {
+        if (this.direction.x !== -1) {
           this.nextDirection = { x: 1, y: 0 }
         }
         break
